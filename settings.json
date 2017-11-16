@@ -1,0 +1,44 @@
+{
+    "projectName": "Paper Sail",
+    "external": true,
+    "root_folder": "/paper-sail/",
+    "www_folder": "www",
+    "switch_lang_by_query": false,
+    "cdn": "",
+    "mobile_only": true,
+    "share": {
+        "en": {
+            "title": "PAPER SAIL",
+            "description": "Are you lost?",
+            "tweet": "Are you lost?",
+            "image": "",
+            "video_url": "",
+            "video_secure_url": "",
+            "video_type": "text/html",
+            "video_width": "200",
+            "video_height": "100"
+        },
+        "fr": {
+            "title": "PAPER SAIL",
+            "description": "Are you lost?",
+            "tweet": "Are you lost?",
+            "image": "",
+            "video_url": "",
+            "video_secure_url": "",
+            "video_type": "text/html",
+            "video_width": "200",
+            "video_height": "100"
+        },
+        "de": {
+            "title": "PAPER SAIL",
+            "description": "Are you lost?",
+            "tweet": "Are you lost?",
+            "image": "",
+            "video_url": "",
+            "video_secure_url": "",
+            "video_type": "text/html",
+            "video_width": "200",
+            "video_height": "100"
+        }
+    }
+}
