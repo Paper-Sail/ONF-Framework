@@ -45,6 +45,7 @@
               game.style.top = header.clientHeight+"px";
             }
           }
+
           var fW = new Framework('<?php echo $framework->exportToJS($force_name); ?>', null);
           window.addEventListener("message",function(event) {
               var dat = event.data;

@@ -24,7 +24,7 @@
     "labels": {
       "HAPROXY_GROUP": "external",
       "HAPROXY_0_REDIRECT_TO_HTTPS": true,
-      "HAPROXY_0_VHOST": "papersail.lab.arte.tv, papersail.veryveryshort.com, papersail.trestrescourt.com, papersail.sehrsehrkurz.com"
+      "HAPROXY_0_VHOST": "papersail.veryveryshort.com, papersail.trestrescourt.com, papersail.sehrsehrkurz.com"
     },
     "portDefinitions": [],
     "ipAddress": {
