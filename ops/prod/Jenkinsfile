@@ -1,0 +1,84 @@
+env.MARATHON_PATH = '/arte/veryveryshort'
+env.MODULE_NAME = 'papersail-php'
+def slack_channel = "#infra"
+def p = env.MARATHON_PATH.tokenize('/')
+env.APP_NAME = p.pop()
+env.APP_GROUP = p.pop()
+def err = null 
+try {
+    node {
+        docker_image = "registry.asl.vixns.net/${env.APP_GROUP}/${env.APP_NAME}/${env.MODULE_NAME}"
+        docker.withRegistry('https://registry.asl.vixns.net/', 'f6987e3f-2e06-4cfb-bd50-938994aa3cc6') {
+            withCredentials([
+                    [$class: 'UsernamePasswordBinding', credentialsId: 'marathonId', variable: 'MARATHON_AUTH'],
+                    [$class: 'StringBinding', credentialsId: "nasUri", variable: 'NAS_URI']
+            ]) {
+                stage('Checkout') {
+                    checkout scm
+            if(env.BRANCH_NAME == null) {
+                        sh('git rev-parse --abbrev-ref HEAD > GIT_BRANCH')
+                        env.BRANCH_NAME=readFile('GIT_BRANCH').trim()
+                    }
+                    println "Branch name: " + env.BRANCH_NAME
+                    sh('git rev-parse HEAD > GIT_COMMIT')
+                    git_commit=readFile('GIT_COMMIT').trim()
+                }
+                stage('Build docker images') {
+                    dockerImg = docker.build("${env.APP_GROUP}/${env.APP_NAME}/${env.MODULE_NAME}", "-f Dockerfile .")
+                    dockerImg.push(git_commit)
+                }
+                if(env.BRANCH_NAME == 'artestudio') {
+                    env.MARATHON_BASENAME = "prod-${env.MARATHON_PATH.tokenize('/').reverse().join('-')}.service.asl"
+                    stage('deploy app to prod') {
+                        writeFile file: "veryveryshort-${env.MODULE_NAME}/marathon-prod-${env.MODULE_NAME}.json", text: readFile("ops/prod/${env.MODULE_NAME}.json")
+                                .replaceAll('_APP_', env.APP_NAME)
+                                .replaceAll('_GROUP_', env.APP_GROUP)
+                                .replaceAll('_MARATHON_BASENAME_', env.MARATHON_BASENAME)
+                                .replaceAll('_NAS_URI_', env.NAS_URI)
+                        marathon(
+                                url: "https://asl.vixns.net:8443/",
+                                credentialsId: "marathonId",
+                                forceUpdate: true,
+                                filename: "veryveryshort-${env.MODULE_NAME}/marathon-prod-${env.MODULE_NAME}.json",
+                                appid: "${env.MARATHON_PATH}/prod/${env.MODULE_NAME}",
+                                docker: "${docker_image}:${git_commit}"
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+catch(caughtError) {
+    err = caughtError
+    if (currentBuild.result == null)  {
+        currentBuild.result = "FAILURE"
+    }
+}
+finally {
+    if (currentBuild.result != "ABORTED")  {
+        switch(currentBuild.result) {
+            case "UNSTABLE":
+                color = "warning"
+                break
+            case "FAILURE":
+                color = "danger"
+                break
+            default:
+                color = "good"
+                currentBuild.result = "SUCCESS"
+        }
+        slackSend channel: slack_channel, color: color, message: "<${env.JOB_URL}|${env.APP_GROUP}/${env.APP_NAME}/${env.MODULE_NAME}> build <${env.BUILD_URL}/console|${currentBuild.result}> <https://${env.APP_NAME}.${env.APP_GROUP}.pp.smol.fr|...>\n${summarizeBuild(currentBuild)}"
+    }
+    if (err && currentBuild.result != "UNSTABLE")  {
+        throw err
+    }
+}
+@NonCPS
+def summarizeBuild(b) {
+    b.changeSets.collect { cs ->
+        "Changes\n" + cs.collect { entry ->
+            /- ${entry.msg} [${entry.author.fullName}]/
+        }.join('\n')
+    }.join('\n')
+}

@@ -1,0 +1,369 @@
+@font-face {
+    font-family: 'kapra_i';
+    src: url('../fonts/blazej_ostoja_lniski_-_kapra-regularitalic-webfont.woff2') format('woff2'),
+         url('../fonts/blazej_ostoja_lniski_-_kapra-regularitalic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'kapra_b';
+    src: url('../fonts/typoforge_studio_-_kapra-bold-webfont.woff2') format('woff2'),
+         url('../fonts/typoforge_studio_-_kapra-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'kapra_r';
+    src: url('../fonts/typoforge_studio_-_kapra-regular-webfont.woff2') format('woff2'),
+         url('../fonts/typoforge_studio_-_kapra-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body{
+	margin: 0;
+	padding: 0;
+}
+
+#onf-intro {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  color: #FFF;
+  font-family: 'kapra_b';
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-align: center;
+  z-index: 9999;
+}
+
+#onf-intro .onf-wrapper{
+  position: absolute;
+  width: 80%;
+  top: 50%;
+  margin: -125px 0 0 10%;
+  opacity: 0;
+}
+
+#onf-intro .partners .partners-text, #onf-intro .collab .collab-text {
+  margin-bottom: 10px;
+}
+
+#onf-intro .partners .onf {
+  position: relative;
+  background-image: url('../images/landing_onf.png');
+  background-position: center center;
+  width: 72px;
+  height: 35px;
+  margin: auto;
+}
+
+#onf-intro .partners .arte {
+  position: relative;
+  background-image: url('../images/landing_arte.png');
+  background-position: center center;
+  width: 102px;
+  height: 25px;
+  margin: auto auto 45px auto;
+}
+
+#onf-intro .collab{
+  margin-top: 90px;
+}
+
+#onf-intro .idfa{
+  position: relative;
+  display: inline-block;
+  background-image: url('../images/landing_idfa.png');
+  background-position: center center;
+  width: 142px;
+  height: 25px;
+}
+
+#onf-warning {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #112037;
+  color: #FFFCEB;
+  z-index: 9999;
+}
+
+#onf-warning * {
+  -webkit-font-smoothing: antialiased;
+}
+
+#onf-warning .warning-content{
+  position: relative;
+  width: 80%;
+  height: 80%;
+  margin: 5% 10%;
+}
+
+#onf-warning .warning-mobile {
+  font-family: "kapra_b";
+  font-size: 26px;
+  padding-bottom: 28px;
+  width: 720px;
+  margin: auto;
+}
+
+
+#onf-warning .warning-mobile a{
+  color: #809dc5;
+  font-size: 30px;
+}
+
+
+#onf-warning .warning-mobile a:hover{
+  color: #FFFCEB;
+}
+
+
+#onf-warning .warning-phone-block {
+  width: 720px;
+  margin: auto;
+}
+
+#onf-warning .warning-phone-block .intl-tel-input{
+  width: 100%;
+  background-color: #FFFCEB;
+  height: 80px;
+  color: #112037;
+  margin-bottom: 25px;
+}
+
+#onf-warning .warning-phone-block .selected-flag {
+  width: 100px;
+}
+
+#onf-warning .warning-phone-block .selected-flag > .iti-flag, #onf-warning .warning-phone-block .selected-flag > .iti-arrow {
+  opacity: 0;
+}
+
+#onf-warning .intl-tel-input .country-list{
+  font-family: "kapra_r";
+  font-size: 20px;
+  background-color: #FFFCEB;
+}
+
+#onf-warning #warning-phone {
+  border: none;
+  font-family: "kapra_i";
+  font-size: 50px;
+  letter-spacing: 1px;
+  color: #112037;
+  padding-left: 170px;
+  position: relative;
+  top: 11px;
+  background-color: transparent;
+}
+
+#onf-warning button#warning-submit {
+  font-family: "kapra_b";
+  font-size: 38px;
+  letter-spacing: 1px;
+  border: none;
+  background-color: #112037;
+  color: #FFFCEB;
+  position: absolute;
+  padding: 10px 30px;
+  margin: 6px 0 0 -98px;
+  cursor: pointer;
+}
+
+#onf-warning button#warning-country {
+  font-family: "kapra_b";
+  font-size: 38px;
+  letter-spacing: 1px;
+  border: none;
+  background-color: #112037;
+  color: #FFFCEB;
+  position: absolute;
+  padding: 10px 30px;
+  margin: 6px 0 0 7px;
+  left: 0px;
+  cursor: pointer;
+}
+
+#onf-warning button:focus, #onf-warning #warning-phone:focus, #onf-warning .flag-container:focus, .intl-tel-input .selected-flag:focus {
+  outline: none;
+} 
+
+#onf-warning .warning-phone-block .warning-misc{
+  font-family: "kapra_b";
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+#onf-warning .warning-status-block {
+  position: absolute;
+  font-family: "kapra_r";
+  font-size: 25px;
+  line-height: 25px;
+  margin: -80px 0 0 740px;
+  width: 200px;
+  z-index: 10;
+  color: #FFFCEB;
+}
+
+#onf-warning .warning-status-block span {
+  width: 100px;
+}
+
+#onf-warning .warning-status-block span.hide {
+  display: none;
+}
+
+#onf-warning .warning-status-block .error {
+  color: #ff3333;
+}
+
+#onf-warning hr {
+    position: relative;
+    width: 720px;
+    margin-top: 90px;
+    border-color: rgba(255, 255, 255, .5);
+} 
+
+#onf-warning hr.nophone {
+  margin-top: 70px;
+}
+
+#onf-warning .warning-project {
+  position: relative;
+  width: 720px;
+  margin: auto;
+  margin-top: 90px;
+}
+
+#onf-warning .warning-project-title {
+  position: relative;
+  font-family: "kapra_b";
+  font-size: 65px;
+  color: #FFFCEB;
+}
+
+#onf-warning .warning-project-author {
+  position: absolute;
+  top: 34px;
+  font-family: "kapra_b";
+  font-size: 28px;
+  color: #FFFCEB;
+  right: 0px;
+  text-transform: uppercase;
+}
+
+#onf-warning .warning-project-tagline {
+  position: relative;
+  font-family: "kapra_b";
+  font-size: 40px;
+  color: #FFFCEB;
+  margin: 60px auto auto auto;
+  text-transform: uppercase;
+}
+
+#onf-warning .warning-project-tagline.toolong{
+  font-size: 34px;
+}
+
+.hh_hidden {
+	animation: fadeOut ease-out 0.2s;
+	-webkit-animation: fadeOut ease-out 0.2s;
+	-moz-animation: fadeOut ease-out 0.2s;
+	-o-animation: fadeOut ease-out 0.2s;
+	-ms-animation: fadeOut ease-out 0.2s;
+}
+
+@keyframes fadeOut{
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-moz-keyframes fadeOut{
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-o-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-ms-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+.iti-flag {
+  background-image: url("../images/flags.png");
+}
+
+@media only screen and (orientation:landscape){
+  #onf-intro .onf-wrapper {
+     margin-top: -91px;
+  }
+  #onf-intro .partners .onf {
+    position: relative;
+    top: 6px;
+  }
+  #onf-intro .partners .onf, #onf-intro .partners .arte {
+    display: inline-block;
+  }
+
+   #onf-intro .partners .arte {
+    margin-bottom: auto;
+    margin-right: 140px;
+   }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .iti-flag {background-image: url("../images/flags@2x.png");}
+
+  #onf-intro .partners .onf {
+    background-image: url('../images/landing_onf_2x.png');
+    background-size: 72px 35px;
+  }
+
+  #onf-intro .partners .arte {
+    background-image: url('../images/landing_arte_2x.png');
+    background-size: 102px 25px;
+  }
+
+  #onf-intro .collab .idfa {
+    background-image: url('../images/landing_idfa_2x.png');
+    background-size: 142px 25px;
+  }
+}

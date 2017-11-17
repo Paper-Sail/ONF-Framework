@@ -1,0 +1,48 @@
+{
+    "projectName": "My Project",
+    "external": true,
+    "root_folder": "/demo/",
+    "www_folder": "www",
+    "switch_lang_by_query": false,
+    "cdn": "https://amazon.ca",
+    "mobile_only": true,
+    "share": {
+        "en": {
+            "title": "My Ttitle EN",
+            "description": "My Description EN",
+            "tweet": "tweet description avec #hashtag and @onf EN",
+            "image": "/demo/img/default.png",
+            "video_url": "Video URL EN",
+            "video_secure_url": "video secure URL EN",
+            "video_type": "text/html",
+            "video_width": "200",
+            "video_height": "100"
+        },
+        "fr": {
+            "title": "My Ttitle FR",
+            "description": "My Description FR",
+            "tweet": "tweet description avec #hashtag and @onf Fr",
+            "image": "/demo/img/default.png",
+            "video_url": "Video URL FR",
+            "video_secure_url": "video secure URL FR",
+            "video_type": "text/html",
+            "video_width": "200",
+            "video_height": "100"
+        },
+        "de": {
+            "title": "My Ttitle DE",
+            "description": "My Description DE",
+            "tweet": "tweet description avec #hashtag and @onf DE",
+            "image": "\/demo/img/default.png",
+            "video_url": "Video URL DE",
+            "video_secure_url": "video secure URL DE",
+            "video_type": "text/html",
+            "video_width": "200",
+            "video_height": "100"
+        }
+    },
+    "analytics": {
+        "name": "myaccount",
+        "id": "UA-XX1111"
+    }
+}

@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'Ciutadella-Medium';
+    src: url('Ciutadella-Medium.eot'); /* IE9 Compat Modes */
+    src: url('Ciutadella-Medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('Ciutadella-Medium.woff') format('woff'), /* Modern Browsers */
+    url('Ciutadella-Medium.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('Ciutadella-Medium.svg#Font1') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: 500;
+}
