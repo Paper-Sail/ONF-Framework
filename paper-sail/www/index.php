@@ -1,3 +1,4 @@
+<?php $framework->update_geoloc(); ?>
 <!doctype html>
 <html class="no-js">
     <head>
@@ -13,20 +14,44 @@
     <body>
         <?php $framework->show_header(); ?>
         <?php $framework->show_tagging_tools(); ?>
-        <iframe id="game" frameborder="0" src="http://sail.spaceshipsin.space" scrolling="no" allowtransparency="true" style="position: absolute; width: 100%; height: 100%;"></iframe>
+        <iframe id="game" frameborder="0" src="https://papersail.lab.arte.tv" scrolling="no" allowtransparency="true" style="position: absolute; width: 100%; height: 100%; left: 0; right: 0;"></iframe>
         <script>
           var header;
           var game;
+          var playing = false;
+          console.log("Heyo");
           window.addEventListener("load",function(){
             game = document.getElementById('game')
+            game.contentWindow.postMessage("host", "*");
             header = document.getElementById('header');
             window.addEventListener("resize",setSize);
             setSize();
           });
           function setSize(){
-            game.style.height = (window.innerHeight-header.clientHeight)+"px";
+            if (playing) {
+              game.style.top = "0";
+              game.style.bottom = "0";
+              game.style.height = "100%";
+              game.style["z-index"] = 2000;
+            } else {
+              game.style.height = (window.innerHeight-header.clientHeight)+"px";
+              game.style.top = header.clientHeight+"px";
+            }
           }
           var fW = new Framework('<?php echo $framework->exportToJS($force_name); ?>', null);
+          window.addEventListener("message",function(event) {
+              var dat = event.data;
+              if (dat.hasOwnProperty("event")){
+                switch (dat.event) {
+                  case "gamestart":
+                    playing = true;
+                    setSize();
+                    break;
+                  default:
+                    
+                }
+              }
+          })
         </script>
     </body>
 </html>
