@@ -19,7 +19,6 @@
           var header;
           var game;
           var playing = false;
-          console.log("Heyo");
           window.addEventListener("load",function(){
             game = document.getElementById('game')
             game.contentWindow.postMessage("host", "*");
