@@ -26,7 +26,7 @@ if(!$ipDetection->dbConnect()) {
 // $remoteIP = "70.38.98.156";//CA QC
 // $remoteIP= "2.21.111.225"; //Austria
 // $remoteIP = "92.88.229.164";//FR
-$ip = (isset($_SESSION["ip"])) ? $_SESSION["ip"] : get_visitor_ip();
+$ip = (isset($_SESSION["ip"]) && $_SESSION["ip"] != "") ? $_SESSION["ip"] : get_visitor_ip();
 $remoteIP = $ip;
 $ipDetection->getIPInfo($remoteIP);
 

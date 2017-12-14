@@ -91,7 +91,11 @@
               method: "POST",
               data: {json: output},
               success: function(data) {
-                  if(data === '1') document.location.reload();
+                    console.log(data);
+                  if(data === '1') {
+                    alert("C'est modifié");
+                    // document.location.reload();
+                  }
               }
             })
         });

@@ -103,6 +103,21 @@ $app->post("/api/all", function ($request, $response, $args) use ($framework, $a
     $body->write( $output );
 });
 
+$app->post("/api/geoloc", function ($request, $response, $args) use ($framework, $app) {
+
+    $language = $request->getParam('language');
+    $ip = $request->getParam("ip");
+    $domain = $request->getParam("domain");
+
+    $_SESSION["ip"] = $ip;
+    $detection = (object) include("detection.php");
+
+    if(isset($domain)) $detection->domain = $domain;
+    if(isset($language) && array_search($language, $framework->get('geoloc')->languages) !== FALSE) $detection->language = $language;
+
+    return $response->withJson( $detection, null, JSON_PRETTY_PRINT );
+});
+
 //---CALL NUMBER
 $app->post("/api/send-texto", function($request, $response, $args) use ($framework, $app) {
 

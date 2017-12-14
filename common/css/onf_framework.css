@@ -27,6 +27,10 @@ body{
 	padding: 0;
 }
 
+#arte-header .next-navigation__logo.next-navigation__logo--standard {
+  display: block !important;
+}
+
 #onf-intro {
   position: absolute;
   top: 0px;
@@ -151,7 +155,7 @@ body{
 #onf-warning .intl-tel-input .country-list{
   font-family: "kapra_r";
   font-size: 20px;
-  background-color: #FFFCEB;
+  background-color: #FFFCEB !important;
 }
 
 #onf-warning #warning-phone {
@@ -159,11 +163,17 @@ body{
   font-family: "kapra_i";
   font-size: 50px;
   letter-spacing: 1px;
-  color: #112037;
+  color: #112037 !important;
   padding-left: 170px;
   position: relative;
   top: 11px;
   background-color: transparent;
+}
+
+#onf-warning #warning-phone::-webkit-input-placeholder, #onf-warning #warning-phone::-ms-input-placeholder, #onf-warning #warning-phone::-moz-placeholder{
+  color: #555;
+  font-size: 50px;
+  line-height: 50px
 }
 
 #onf-warning button#warning-submit {
@@ -190,6 +200,8 @@ body{
   padding: 10px 30px;
   margin: 6px 0 0 7px;
   left: 0px;
+  top: 0px;
+  display: block;
   cursor: pointer;
 }
 
@@ -274,6 +286,8 @@ body{
   font-size: 34px;
 }
 
+
+
 .hh_hidden {
 	animation: fadeOut ease-out 0.2s;
 	-webkit-animation: fadeOut ease-out 0.2s;
@@ -347,6 +361,27 @@ body{
     margin-bottom: auto;
     margin-right: 140px;
    }
+}
+
+@media only screen and (max-width: 800px) {
+  #onf-warning {
+    width: 100%;
+    margin: 0 0 0;
+  }
+
+  #onf-warning .warning-mobile, #onf-warning hr {
+    width: 100%;
+  }
+
+  #onf-warning .warning-project-author {
+    left: 0px;
+    right: auto;
+    top: 70px;
+  }
+  
+  #onf-warning .warning-project {
+    width: 100%;
+  }
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {

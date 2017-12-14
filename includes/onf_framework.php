@@ -1,5 +1,5 @@
 <?php
-// * ONF Framework v1.4.5 *
+// * ONF Framework v1.6.1 *
 session_start();
 
 class Framework
@@ -18,23 +18,22 @@ class Framework
 		//no detection -- fr default
 		if($this->get('settings')->external) {
 			$this->detection = (object) [
-				"language" => "fr",
+				"language" => "en",
 				"languages" => ["en", "fr", "de"],
-			    "topnav" => "onf",
+			    "topnav" => "arte",
 				"environment" => "dev",
 				"domain" => "https://".str_replace("www.", "", preg_replace("/\/(.+)/", "", $_SERVER["SERVER_NAME"])),
-				"framework_domain" => "https://trestrescourt.onf.ca"
+				"framework_domain" => "https://veryveryshort.nfb.ca"
 			];
 		}
 		else{
 			if(isset($ip)) $_SESSION["ip"] = $ip;
 
 			$this->detection = (object) include("core/detection.php");
+			$this->activeLang = (object) json_decode(file_get_contents("https://veryveryshort.nfb.ca/includes/admin/languages.json"));
+			$this->_setAssetsURL();
+			$this->_setLandingContent();
 		}
-
-		$this->activeLang = (object) json_decode(file_get_contents(__DIR__."/admin/languages.json"));
-		$this->_setAssetsURL();
-		$this->_setLandingContent();
 	}
 
 	//show all meta string for sharing (facebook, twitter)
@@ -433,6 +432,39 @@ class Framework
 		}
 	}
 
+	public function update_geoloc() {
+		if($this->get('settings')->external) {
+			$url = 'https://veryveryshort.nfb.ca/api/geoloc';
+			// $url = 'http://veryveryshort-dev.nfb.ca/api/geoloc';
+
+			$data = array(
+				"language" => $this->get("geoloc")->language,
+				"domain" => "https://".str_replace("www.", "", preg_replace("/\/(.+)/", "", $_SERVER["SERVER_NAME"])),
+				"ip" => $this->_getIP(),
+			);
+
+			//open connection
+			$ch = curl_init($url);
+
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+			 
+			//Set the content type to application/json
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json')); 
+			 
+			//execute post
+			$results = json_decode(curl_exec($ch));
+			
+			//overwrite with the good detection datas
+			if(isset($results->ip)) $this->detection = $results;
+			
+			$this->activeLang = (object) json_decode(file_get_contents("https://veryveryshort.nfb.ca/includes/admin/languages.json"));
+			$this->_setAssetsURL();
+			$this->_setLandingContent();
+		}
+	}
+
 	//----
 
 	private function _getActiveLang($projectName) {
@@ -482,6 +514,28 @@ class Framework
 		}
     }
 
+    private function _getIP() {
+    	if ( function_exists( 'apache_request_headers' ) ) {
+			$headers = apache_request_headers();
+		}
+		else {
+			$headers = $_SERVER;
+		}
+
+		//Get the forwarded IP if it exists
+		if ( array_key_exists( 'X-Forwarded-For', $headers ) && filter_var( $headers['X-Forwarded-For'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ){
+			$the_ip = $headers['X-Forwarded-For'];
+		}
+		elseif ( array_key_exists( 'HTTP_X_FORWARDED_FOR', $headers ) && filter_var( $headers['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 )) {
+			$the_ip = $headers['HTTP_X_FORWARDED_FOR'];
+		}
+		else {
+			$the_ip = filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 );
+		}
+
+		return $the_ip;
+    }
+
     private function _setAssetsURL() {
     	$domain = $this->get('geoloc')->framework_domain;
 
@@ -511,138 +565,138 @@ class Framework
     			"url" => [
     				"fr" => "https://trestrescourt.com/cododo",
     				"en" => "https://veryveryshort.com/sleeptogether",
-    				"de" => "https://veryveryshort.com/sleeptogether"
+    				"de" => "https://sehrsehrkurz.com/abindiekiste"
     			],
 				"title" => [
 					"fr" => "CODODO",
 					"en" => "SLEEP TOGETHER",
-					"de" => "SLEEP TOGETHER de"
+					"de" => "AB IN DIE KISTE"
 				],
 				"author" => [
 					"fr" => "par Laura Juo-Hsin Chen",
 					"en" => "by Laura Juo-Hsin Chen",
-					"de" => "by Laura Juo-Hsin Chen de"
+					"de" => "von Laura Juo-Hsin Chen"
 				],
           		"tagline" => [
           			"fr" => "Ne vous endormez plus jamais seul.",
           			"en" => "Never go to sleep alone again.",
-          			"de" => "Enter the rabbit hole and let’s all sleep together. de"
+          			"de" => "Schlafen Sie nie mehr alleine ein."
           		],
           		"warning" => [
           			"fr" => "Cette expérience est optimisée pour appareil mobile.<br/>Entrez votre numéro de téléphone pour recevoir l'expérience par message texte.",
           			"en" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile.",
-          			"de" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile. de"
+          			"de" => "Dieses Erlebnis wurde für Mobilgeräte konzipiert.<br/>Geben Sie Ihre Telefonnummer ein, um das Erlebnis als Textnachricht gesendet zu bekommen."
           		],
           		"misc" => [
           			"fr" => "L'ONF et ARTE ne conservent aucun numéro de téléphone.",
           			"en" => "The NFB and ARTE do not keep any phone number.",
-          			"de" => "L'ONF et ARTE ne conservent aucun numéro de téléphone. de"
+          			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
           			"fr" => "https://trestrescourt.com/cododo 🌚",
           			"en" => "https://veryveryshort.com/sleeptogether 🌚",
-          			"de" => "https://veryveryshort.com/sleeptogether 🌚"
+          			"de" => "https://sehrsehrkurz.com/abindiekiste 🌚"
           		]
           	],
         	"STIR" => [
     			"url" => [
     				"fr" => "https://trestrescourt.com/appeldureveil",
     				"en" => "https://veryveryshort.com/stir",
-    				"de" => "https://veryveryshort.com/stir"
+    				"de" => "https://sehrsehrkurz.com/weckruf"
     			],
 				"title" => [
 					"fr" => "L'APPEL DU RÉVEIL",
 					"en" => "STIR",
-					"de" => "STIR de"
+					"de" => "WECKRUF"
 				],
 				"author" => [
 					"fr" => "par Rebecca Lieberman et Julia Irwin",
 					"en" => "by Rebecca Lieberman and Julia Irwin",
-					"de" => "by Rebecca Lieberman and Julia Irwin de"
+					"de" => "von Rebecca Lieberman und Julia Irwin"
 				],
           		"tagline" => [
           			"fr" => "Être réveillé par un étranger n’aura jamais été si doux.",
           			"en" => "Waking up to the sound of a stranger’s voice never felt so right.",
-          			"de" => "Waking up to the sound of a stranger’s voice never felt so right. de"
+          			"de" => "Noch nie war es so schön, von einer fremden Stimme geweckt zu werden."
           		],
           		"warning" => [
           			"fr" => "Cette expérience est optimisée pour appareil mobile.<br/>Entrez votre numéro de téléphone pour recevoir l'expérience par message texte.",
           			"en" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile.",
-          			"de" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile. de"
+          			"de" => "Dieses Erlebnis wurde für Mobilgeräte konzipiert.<br/>Geben Sie Ihre Telefonnummer ein, um das Erlebnis als Textnachricht gesendet zu bekommen."
           		],
           		"misc" => [
           			"fr" => "L'ONF et ARTE ne conservent aucun numéro de téléphone.",
           			"en" => "The NFB and ARTE do not keep any phone number.",
-          			"de" => "L'ONF et ARTE ne conservent aucun numéro de téléphone. de"
+          			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
           			"fr" => "https://trestrescourt.com/appeldureveil ⏰",
           			"en" => "https://veryveryshort.com/stir ⏰",
-          			"de" => "https://veryveryshort.com/stir ⏰"
+          			"de" => "https://sehrsehrkurz.com/weckruf ⏰"
           		]
           	],
           	"BIAS" => [
     			"url" => [
     				"fr" => "https://trestrescourt.com/apriori",
     				"en" => "https://veryveryshort.com/bias",
-    				"de" => "https://veryveryshort.com/bias"
+    				"de" => "https://sehrsehrkurz.com/vorurteile"
     			],
 				"title" => [
 					"fr" => "A PRIORI",
 					"en" => "BIAS",
-					"de" => "BIAS de"
+					"de" => "VORURTEILE"
 				],
 				"author" => [
 					"fr" => "par Nicolas S. Roy, Rebecca West et Catherine D'Amours",
 					"en" => "by Nicolas S. Roy, Rebecca West and Catherine D'Amours",
-					"de" => "by Nicolas S. Roy, Rebecca West and Catherine D'Amours de"
+					"de" => "von Nicolas S. Roy, Rebecca West und Catherine D'Amours"
 				],
           		"tagline" => [
           			"fr" => "Votre esprit vous joue-t-il des tours?",
           			"en" => "Is your mind made up?",
-          			"de" => "Is your mind made up? de"
+          			"de" => "Sind Ihre Gedanken wirklich frei?"
           		],
           		"warning" => [
           			"fr" => "Cette expérience est optimisée pour appareil mobile.<br/>Entrez votre numéro de téléphone pour recevoir l'expérience par message texte.",
           			"en" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile.",
-          			"de" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile. de"
+          			"de" => "Dieses Erlebnis wurde für Mobilgeräte konzipiert.<br/>Geben Sie Ihre Telefonnummer ein, um das Erlebnis als Textnachricht gesendet zu bekommen."
           		],
           		"misc" => [
           			"fr" => "L'ONF et ARTE ne conservent aucun numéro de téléphone.",
           			"en" => "The NFB and ARTE do not keep any phone number.",
-          			"de" => "L'ONF et ARTE ne conservent aucun numéro de téléphone. de"
+          			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
           			"fr" => "https://trestrescourt.com/apriori 👁",
           			"en" => "https://veryveryshort.com/bias 👁",
-          			"de" => "https://veryveryshort.com/bias 👁"
+          			"de" => "https://sehrsehrkurz.com/vorurteile 👁"
           		]
           	],
           	"WHERE IS HOME" => [
     			"url" => [
     				"fr" => "https://trestrescourt.com/etrechezsoi",
     				"en" => "https://veryveryshort.com/whereishome",
-    				"de" => "https://veryveryshort.com/whereishome"
+    				"de" => "https://sehrsehrkurz.com/wasistheimat"
     			],
 				"title" => [
 					"fr" => "ÊTRE CHEZ SOI",
 					"en" => "WHERE IS HOME?",
-					"de" => "WHERE IS HOME? de"
+					"de" => "WAS IST HEIMAT?"
 				],
 				"author" => [
 					"fr" => "par Ifeatu Nnaobi",
 					"en" => "by Ifeatu Nnaobi",
-					"de" => "by Ifeatu Nnaobi de"
+					"de" => "von Ifeatu Nnaobi"
 				],
           		"tagline" => [
           			"fr" => "Parfois chez soi n'est pas sous son toit.",
           			"en" => "Sometimes you have to look for home outside the box.",
-          			"de" => "Sometimes you have to look for home outside the box. de"
+          			"de" => "Manchmal ist die Heimat nicht dort, wo wir sie vermuten."
           		],
           		"warning" => [
           			"fr" => "Découvrez cette expérience sur l'app Instagram de votre mobile.<br/><a href='https://instagram.com/etrechezsoi'>@etrechezsoi</a>",
           			"en" => "Discover this experience on your Insta.<br/><a href='https://instagram.com/whereis_home'>@whereis_home</a>",
-          			"de" => "Discover this experience on your Insta [lien a venir @whereishome_nfb] de"
+          			"de" => "Entdecken Sie dieses Erlebnis auf Instagram..<br/><a href='https://instagram.com/wasistheimat'>@wasistheimat</a>"
           		],
           		"misc" => [
           			"fr" => "",
@@ -659,222 +713,222 @@ class Framework
     			"url" => [
     				"fr" => "https://trestrescourt.com/pigeonvoyageur",
     				"en" => "https://veryveryshort.com/carrierpigeon",
-    				"de" => "https://veryveryshort.com/carrierpigeon"
+    				"de" => "https://sehrsehrkurz.com/brieftaube"
     			],
 				"title" => [
 					"fr" => "PIGEON VOYAGEUR",
 					"en" => "CARRIER PIGEON",
-					"de" => "CARRIER PIGEON de"
+					"de" => "BRIEFTAUBE"
 				],
 				"author" => [
 					"fr" => "par Folklore",
 					"en" => "by Folklore",
-					"de" => "by Folklore de"
+					"de" => "von Folklore"
 				],
           		"tagline" => [
           			"fr" => "Suivez vos communications sur l'autoroute de l'information.",
           			"en" => "Follow your communications on the information superhighway.",
-          			"de" => "Follow your communications on the information superhighway. de"
+          			"de" => "Verfolgen Sie Ihre Interaktionen auf der Datenautobahn."
           		],
           		"warning" => [
           			"fr" => "Cette expérience est optimisée pour appareil mobile.<br/>Entrez votre numéro de téléphone pour recevoir l'expérience par message texte.",
           			"en" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile.",
-          			"de" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile. de"
+          			"de" => "Dieses Erlebnis wurde für Mobilgeräte konzipiert.<br/>Geben Sie Ihre Telefonnummer ein, um das Erlebnis als Textnachricht gesendet zu bekommen."
           		],
           		"misc" => [
           			"fr" => "L'ONF et ARTE ne conservent aucun numéro de téléphone.",
           			"en" => "The NFB and ARTE do not keep any phone number.",
-          			"de" => "The NFB and ARTE do not keep any phone number."
+          			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
           			"fr" => "https://trestrescourt.com/pigeonvoyageur 🐦",
           			"en" => "https://veryveryshort.com/carrierpigeon 🐦",
-          			"de" => "https://veryveryshort.com/carrierpigeon 🐦"
+          			"de" => "https://sehrsehrkurz.com/brieftaube 🐦"
           		]
           	],
           	"FLIPFLY" => [
     			"url" => [
     				"fr" => "https://trestrescourt.com/envolee",
     				"en" => "https://veryveryshort.com/flipfly",
-    				"de" => "https://veryveryshort.com/flipfly"
+    				"de" => "https://sehrsehrkurz.com/hoehenflug"
     			],
 				"title" => [
 					"fr" => "ENVOLÉE",
 					"en" => "FLIPFLY",
-					"de" => "FLIPFLY de"
+					"de" => "HÖHENFLUG"
 				],
 				"author" => [
 					"fr" => "par Lucile Cossou, Gabriel Dalmasso et Rémy Bonté-Duval",
 					"en" => "by Lucile Cossou, Gabriel Dalmasso and Rémy Bonté-Duval",
-					"de" => "by Lucile Cossou, Gabriel Dalmasso and Rémy Bonté-Duval de"
+					"de" => "von Lucile Cossou, Gabriel Dalmasso und Rémy Bonté-Duval"
 				],
           		"tagline" => [
           			"fr" => "Prêt pour le décollage?",
           			"en" => "Ready for take-off?",
-          			"de" => "Ready for take-off? de"
+          			"de" => "Zum Abflug bereit?"
           		],
           		"warning" => [
           			"fr" => "Cette expérience est optimisée pour appareil mobile.<br/>Entrez votre numéro de téléphone pour recevoir l'expérience par message texte.",
           			"en" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile.",
-          			"de" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile. de"
+          			"de" => "Dieses Erlebnis wurde für Mobilgeräte konzipiert.<br/>Geben Sie Ihre Telefonnummer ein, um das Erlebnis als Textnachricht gesendet zu bekommen."
           		],
           		"misc" => [
           			"fr" => "L'ONF et ARTE ne conservent aucun numéro de téléphone.",
           			"en" => "The NFB and ARTE do not keep any phone number.",
-          			"de" => "The NFB and ARTE do not keep any phone number."
+          			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
           			"fr" => "https://trestrescourt.com/envolee ✈️",
           			"en" => "https://veryveryshort.com/flipfly ✈️",
-          			"de" => "https://veryveryshort.com/flipfly ✈️"
+          			"de" => "https://sehrsehrkurz.com/hoehenflug ✈️"
           		]
           	],
           	"THE PAPER SAIL" => [
     			"url" => [
     				"fr" => "https://trestrescourt.com/voiledepapier",
     				"en" => "https://veryveryshort.com/papersail",
-    				"de" => "https://veryveryshort.com/papersail"
+    				"de" => "https://sehrsehrkurz.com/papierboot"
     			],
 				"title" => [
 					"fr" => "LA VOILE DE PAPIER",
 					"en" => "THE PAPER SAIL",
-					"de" => "THE PAPER SAIL de"
+					"de" => "PAPIERBOOT"
 				],
 				"author" => [
-					"fr" => "par Cosmgrafik & Gaeel",
-					"en" => "by Cosmgrafik & Gaeel",
-					"de" => "by Cosmgrafik & Gaeel"
+					"fr" => "par Cosmografik & Gaeel, en collaboration avec Ex Nihilo",
+					"en" => "by Cosmografik & Gaeel, in collaboration with Ex Nihilo",
+					"de" => "von Cosmografik & Gaeel, in Zusammenarbeit mit Ex Nihilo"
 				],
           		"tagline" => [
           			"fr" => "Pliez bagage et partez à la découverte.",
           			"en" => "Hoist the sail to discover unexplored seas.",
-          			"de" => "Hoist the sail to discover unexplored seas. de"
+          			"de" => "Setzen Sie die Segel und stechen Sie in See!"
           		],
           		"warning" => [
           			"fr" => "Cette expérience est optimisée pour appareil mobile.<br/>Entrez votre numéro de téléphone pour recevoir l'expérience par message texte.",
           			"en" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile.",
-          			"de" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile. de"
+          			"de" => "Dieses Erlebnis wurde für Mobilgeräte konzipiert.<br/>Geben Sie Ihre Telefonnummer ein, um das Erlebnis als Textnachricht gesendet zu bekommen."
           		],
           		"misc" => [
           			"fr" => "L'ONF et ARTE ne conservent aucun numéro de téléphone.",
           			"en" => "The NFB and ARTE do not keep any phone number.",
-          			"de" => "The NFB and ARTE do not keep any phone number."
+          			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
           			"fr" => "https://trestrescourt.com/voiledepapier ⛵️",
           			"en" => "https://veryveryshort.com/papersail ⛵️",
-          			"de" => "https://veryveryshort.com/papersail ⛵️"
+          			"de" => "https://sehrsehrkurz.com/papierboot ⛵️"
           		]
           	],
           	"REVOLVE" => [
     			"url" => [
     				"fr" => "https://trestrescourt.com/revolutio",
     				"en" => "https://veryveryshort.com/revolve",
-    				"de" => "https://veryveryshort.com/revolve"
+    				"de" => "https://sehrsehrkurz.com/vortex"
     			],
 				"title" => [
 					"fr" => "REVOLUTIO",
 					"en" => "REVOLVE",
-					"de" => "REVOLVE de"
+					"de" => "VORTEX"
 				],
 				"author" => [
 					"fr" => "par Bram Loogman et Joaquin Wall",
 					"en" => "by Bram Loogman and Joaquin Wall",
-					"de" => "by Bram Loogman and Joaquin Wall de"
+					"de" => "von Bram Loogman und Joaquin Wall"
 				],
           		"tagline" => [
           			"fr" => "Tournez sur le rythme!",
           			"en" => "Spin to the rhythm!",
-          			"de" => "Spin to the rhythm! de"
+          			"de" => "Drehen Sie sich im Rhythmus!"
           		],
           		"warning" => [
           			"fr" => "Cette expérience est optimisée pour appareil mobile.<br/>Entrez votre numéro de téléphone pour recevoir l'expérience par message texte.",
           			"en" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile.",
-          			"de" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile. de"
+          			"de" => "Dieses Erlebnis wurde für Mobilgeräte konzipiert.<br/>Geben Sie Ihre Telefonnummer ein, um das Erlebnis als Textnachricht gesendet zu bekommen."
           		],
           		"misc" => [
           			"fr" => "L'ONF et ARTE ne conservent aucun numéro de téléphone.",
           			"en" => "The NFB and ARTE do not keep any phone number.",
-          			"de" => "The NFB and ARTE do not keep any phone number."
+          			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
           			"fr" => "https://trestrescourt.com/revolutio 💃",
           			"en" => "https://veryveryshort.com/revolve 💃",
-          			"de" => "https://veryveryshort.com/revolve 💃"
+          			"de" => "https://sehrsehrkurz.com/vortex 💃"
           		]
           	],
           	"VIRAL ADVISOR" => [
     			"url" => [
     				"fr" => "https://trestrescourt.com/viralconseil",
     				"en" => "https://veryveryshort.com/viraladvisor",
-    				"de" => "https://veryveryshort.com/viraladvisor"
+    				"de" => "https://sehrsehrkurz.com/viralberater"
     			],
 				"title" => [
 					"fr" => "VIRAL CONSEIL",
 					"en" => "VIRAL ADVISOR",
-					"de" => "VIRAL ADVISOR de"
+					"de" => "VIRAL-BERATER"
 				],
 				"author" => [
 					"fr" => "par Dries Depoorter et David Surprenant",
 					"en" => "by Dries Depoorter et David Surprenant",
-					"de" => "by Dries Depoorter et David Surprenant de"
+					"de" => "von Dries Depoorter und David Surprenant"
 				],
           		"tagline" => [
           			"fr" => "Montrez votre meilleur profil.",
           			"en" => "Become your best online self.",
-          			"de" => "Become your best online self. de"
+          			"de" => "Mach das Beste aus deinem Online-Ich!"
           		],
           		"warning" => [
           			"fr" => "Cette expérience est optimisée pour appareil mobile.<br/>Entrez votre numéro de téléphone pour recevoir l'expérience par message texte.",
           			"en" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile.",
-          			"de" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile. de"
+          			"de" => "Dieses Erlebnis wurde für Mobilgeräte konzipiert.<br/>Geben Sie Ihre Telefonnummer ein, um das Erlebnis als Textnachricht gesendet zu bekommen."
           		],
           		"misc" => [
           			"fr" => "L'ONF et ARTE ne conservent aucun numéro de téléphone.",
           			"en" => "The NFB and ARTE do not keep any phone number.",
-          			"de" => "The NFB and ARTE do not keep any phone number."
+          			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
           			"fr" => "https://trestrescourt.com/viralconseil 💯",
           			"en" => "https://veryveryshort.com/viraladvisor 💯",
-          			"de" => "https://veryveryshort.com/viraladvisor 💯"
+          			"de" => "https://sehrsehrkurz.com/viralberater 💯"
           		]
           	],
           	"A TEMPORARY CONTACT" => [
     			"url" => [
     				"fr" => "https://trestrescourt.com/temporarycontact_fr",
     				"en" => "https://veryveryshort.com/temporarycontact",
-    				"de" => "https://veryveryshort.com/temporarycontact"
+    				"de" => "https://sehrsehrkurz.com/voruebergehenderkontakt"
     			],
 				"title" => [
 					"fr" => "CONTACT ÉPHÉMÈRE",
 					"en" => "A TEMPORARY CONTACT",
-					"de" => "A TEMPORARY CONTACT de"
+					"de" => "VORÜBERGEHENDER KONTAKT"
 				],
 				"author" => [
 					"fr" => "par Sara Kolster and Nirit Peled",
 					"en" => "by Sara Kolster and Nirit Peled",
-					"de" => "by Sara Kolster and Nirit Peled de"
+					"de" => "von Sara Kolster und Nirit Peled"
 				],
           		"tagline" => [
           			"fr" => "Montez à bord pour débuter votre voyage… vers la prison.",
           			"en" => "Hop on your phone to embark on a journey… to prison.",
-          			"de" => "Hop on your phone to embark on a journey… to prison. de"
+          			"de" => "Kommen Sie mit auf einen Ausflug ..."
           		],
           		"warning" => [
           			"fr" => "Cette expérience est optimisée pour appareil mobile.<br/>Entrez votre numéro de téléphone pour recevoir l'expérience par message texte.",
           			"en" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile.",
-          			"de" => "This experience is optimized for mobile platforms.<br/>Enter your phone number to receive the experience directly on your mobile. de"
+          			"de" => "Dieses Erlebnis wurde für Mobilgeräte konzipiert.<br/>Geben Sie Ihre Telefonnummer ein, um das Erlebnis als Textnachricht gesendet zu bekommen."
           		],
           		"misc" => [
           			"fr" => "L'ONF et ARTE ne conservent aucun numéro de téléphone.",
           			"en" => "The NFB and ARTE do not keep any phone number.",
-          			"de" => "The NFB and ARTE do not keep any phone number."
+          			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
           			"fr" => "Voici comment faire l'expérience :\\n\\n✅ Téléchargez WhatsApp sur votre mobile\\n✅  Ajoutez XXXX (XXXXX) à vos contacts\\n✅  Envoyez le premier message\\n\\nVous êtes maintenant à bord! 🚎",
           			"en" => "Here's how to do this experience :\\n\\n✅ Download WhatsApp on your mobile\\n✅  Add A Temporary Contact (XXXXX) to your address book\\n✅  Send the first message\\n\\nYou are now on board! 🚎",
-          			"de" => "Here's how to do this experience :\\n\\n✅ Download WhatsApp on your mobile\\n✅  Add A Temporary Contact (XXXXX) to your address book\\n✅  Send the first message\\n\\nYou are now on board! 🚎"
+          			"de" => "So nehmen Sie am Erlebnis teil :\\n\\n✅ Laden Sie WhatsApp auf Ihr Mobilgerät herunter.\\n✅  Fügen Sie 'Vorübergehender Kontakt' (XXXXX) zu Ihren Kontakten hinzu.\\n✅  Senden Sie die erste Nachricht.\\n\\nNun sind Sie an Bord! 🚎"
           		]
           	]
         ];

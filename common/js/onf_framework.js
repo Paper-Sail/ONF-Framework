@@ -1,6 +1,6 @@
 class Framework {
   	constructor(options, callback, noIntro) {
-      this.version = "v1.4.5";
+      this.version = "v1.6.1";
     	this.config = JSON.parse(options);
       this.hidden = false;
       this.callback = callback;
@@ -78,6 +78,17 @@ class Framework {
   	}
 
     showIntro() {
+
+     /* if(this.config.projectName.toUpperCase() === "WHERE IS HOME") {
+        this.showWarning();
+
+        $("#onf-warning a").on("click", (function(){
+
+            this.track("click", "instagram-link");
+          
+        }).bind(this));
+        return;
+      }*/
       
       this.track("landing page", "show-landing-page-to-user");
 
@@ -151,12 +162,12 @@ class Framework {
         switch(this.config.language) {
           case "fr":
           merci = "Merci!";
-          oups = "NumÃ©ro invalide"
+          oups = "Numéro invalide"
           break;
 
           case "de":
-          merci = "Merci de!";
-          oups = "NumÃ©ro invalide de"
+          merci = "Danke!";
+          oups = "Nummer ungültig"
           break;
 
           case "en":
@@ -222,16 +233,17 @@ class Framework {
           method: "POST",
           success: (function(data) {
             if(data === "sent") {
-              phone.val('');
-
-              var valid = $(".warning-status-block .valid");
-              valid.removeClass("hide");
-              setTimeout(valid.addClass.bind(valid), 2000, "hide");
-
+              //
               this.track("page sms", "click-send-sms-sent");
             }
           }).bind(this)
         });
+
+        phone.val('');
+
+        var valid = $(".warning-status-block .valid");
+        valid.removeClass("hide");
+        setTimeout(valid.addClass.bind(valid), 2000, "hide");
       }
       else{
         //show error
@@ -241,19 +253,19 @@ class Framework {
 
     _initEvent() {
 
-      $("body").on("touchmove", (function(e){
+      // $("body").on("touchmove", (function(e){
         
-        if(!this.hidden) {
+      //   if(!this.hidden) {
 
-          $(".hh_onf").addClass("hh_hidden")
-            .on("animationend", function(e){
-              $(e.target).hide();
-            });
+      //     $(".hh_onf").addClass("hh_hidden")
+      //       .on("animationend", function(e){
+      //         $(e.target).hide();
+      //       });
 
-          this.hidden = true;
-        }
+      //     this.hidden = true;
+      //   }
 
-      }).bind(this));
+      // }).bind(this));
     }
 }
 
@@ -263,7 +275,7 @@ $( document ).ready(function() {
   var phone = $("#warning-phone")
   , submit = $("#warning-submit");
 
-  phone.intlTelInput({utilsScript: "/common/js/utils.js"});
+  phone.intlTelInput({utilsScript: "https://veryveryshort.nfb.ca/common/js/utils.js"});
 
   var countryBtn = $("<button id='warning-country'>US</button>");
 
