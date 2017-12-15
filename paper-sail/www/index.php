@@ -19,7 +19,7 @@
     <body>
         <?php $framework->show_header(); ?>
         <?php $framework->show_tagging_tools(); ?>
-        <iframe id="game" frameborder="0" src="http://localhost:5000/<?php $lang = $framework->get(“geoloc”)->language; echo ($lang?$lang:"en") ?>/" scrolling="no" allowtransparency="true"></iframe>
+        <iframe id="game" frameborder="0" src="https://papersail.lab.arte.tv/<?php $lang = $framework->get(“geoloc”)->language; echo ($lang?$lang:"en") ?>/" scrolling="no" allowtransparency="true"></iframe>
         <script>
           var header;
           var game;
