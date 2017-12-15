@@ -8,13 +8,18 @@
       <meta name="apple-mobile-web-app-capable" content="yes" >
       <meta name="mobile-web-app-capable" content="yes"  >
       <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+      <style>
+        #game {
+          position: absolute; width: 100%; height: 100%; left: 0; right: 0;
+        }
+      </style>
       <?php $framework->show_dependencies(); ?>
       <?php $framework->show_share_meta(); ?>
     </head>
     <body>
         <?php $framework->show_header(); ?>
         <?php $framework->show_tagging_tools(); ?>
-        <iframe id="game" frameborder="0" src="https://papersail.lab.arte.tv" scrolling="no" allowtransparency="true" style="position: absolute; width: 100%; height: 100%; left: 0; right: 0;"></iframe>
+        <iframe id="game" frameborder="0" src="http://localhost:5000/<?php $lang = $framework->get(“geoloc”)->language; echo ($lang?$lang:"en") ?>/" scrolling="no" allowtransparency="true"></iframe>
         <script>
           var header;
           var game;
