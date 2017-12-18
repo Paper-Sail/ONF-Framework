@@ -28,6 +28,9 @@
             game = document.getElementById('game')
             game.contentWindow.postMessage("host", "*");
             header = document.getElementById('header');
+            if (!header){
+              header = document.getElementById('arte-header');
+            }
             window.addEventListener("resize",setSize);
             setSize();
           });
