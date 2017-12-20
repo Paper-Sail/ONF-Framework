@@ -5,7 +5,7 @@
     "www_folder": "www",
     "switch_lang_by_query": false,
     "cdn": "",
-    "mobile_only": false,
+    "mobile_only": true,
     "share": {
         "en": {
             "title": "PAPER SAIL",
