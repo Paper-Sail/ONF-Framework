@@ -15,7 +15,7 @@
         "path": "/ping.html",
         "protocol": "HTTP",
         "port": 80,
-        "gracePeriodSeconds": 45,
+        "gracePeriodSeconds": 300,
         "intervalSeconds": 10,
         "timeoutSeconds": 10,
         "maxConsecutiveFailures": 3
