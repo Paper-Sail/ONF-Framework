@@ -785,7 +785,7 @@ class Framework
           	],
           	"THE PAPER SAIL" => [
     			"url" => [
-    				"fr" => "https://trestrescourt.com/voiledepapier",
+    				"fr" => "https://trestrescourt.com/lavoiledepapier",
     				"en" => "https://veryveryshort.com/papersail",
     				"de" => "https://sehrsehrkurz.com/papierboot"
     			],
@@ -795,9 +795,9 @@ class Framework
 					"de" => "PAPIERBOOT"
 				],
 				"author" => [
-					"fr" => "par Cosmografik & Gaeel, en collaboration avec Ex Nihilo",
-					"en" => "by Cosmografik & Gaeel, in collaboration with Ex Nihilo",
-					"de" => "von Cosmografik & Gaeel, in Zusammenarbeit mit Ex Nihilo"
+					"fr" => "par Cosmografik & Gaeel,<br/>en collaboration avec Ex Nihilo",
+					"en" => "by Cosmografik & Gaeel,<br/>in collaboration with Ex Nihilo",
+					"de" => "von Cosmografik & Gaeel,<br/>in Zusammenarbeit mit Ex Nihilo"
 				],
           		"tagline" => [
           			"fr" => "Pliez bagage et partez à la découverte.",
@@ -815,7 +815,7 @@ class Framework
           			"de" => "NFB und ARTE bewahren keine Telefonnummern auf."
           		],
           		"sms" => [
-          			"fr" => "https://trestrescourt.com/voiledepapier ⛵️",
+          			"fr" => "https://trestrescourt.com/lavoiledepapier ⛵️",
           			"en" => "https://veryveryshort.com/papersail ⛵️",
           			"de" => "https://sehrsehrkurz.com/papierboot ⛵️"
           		]

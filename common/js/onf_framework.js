@@ -79,16 +79,28 @@ class Framework {
 
     showIntro() {
 
-     /* if(this.config.projectName.toUpperCase() === "WHERE IS HOME") {
-        this.showWarning();
+      if(this.config.projectName.toUpperCase() === "WHERE IS HOME") {
+        var insta;
 
-        $("#onf-warning a").on("click", (function(){
+        $("body").hide();
 
-            this.track("click", "instagram-link");
-          
-        }).bind(this));
+        switch(this.config.language) {
+          case "de":
+          insta = "https://www.instagram.com/wasistheimat/";
+          break;
+
+          case "fr":
+          insta = "https://www.instagram.com/etrechezsoi/";
+          break;
+
+          case "en":
+          insta = "https://www.instagram.com/whereis_home/";
+          break; 
+        }
+
+        document.location.href = insta;
         return;
-      }*/
+      }
       
       this.track("landing page", "show-landing-page-to-user");
 
@@ -206,6 +218,8 @@ class Framework {
 
       $page = $($page);
       $page.prependTo($("body"));
+
+      if(this.config.projectName.toUpperCase() == "THE PAPER SAIL") $(".warning-project-author").css("top", "6px");
 
       $("#warning-submit").on("click", this.onSendTexto.bind(this));
     }
