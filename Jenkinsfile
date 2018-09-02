@@ -7,7 +7,7 @@ def secrets = [
 
 aslApp {
     slack_channel='#infra'
-    group='papersail'
+    group='papersail-php'
     owner='veryveryshort'
     apps=[
         [
